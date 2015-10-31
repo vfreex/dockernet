@@ -163,7 +163,7 @@ delroute() {
 wait() {
   CONTAINER_IFNAME="$1"
   while true; do
-    ip link show dev "$CONTAINER_IFNAME" up | grep up && break
+    ip link show dev "$CONTAINER_IFNAME" up | grep UP && break
     sleep 1
   done > /dev/null 2>&1
 }
