@@ -19,7 +19,7 @@ Content Table
 
 Things to note
 --------------
-1. Use the `--net=none` option when start a container to tell Docker not to configure its network automatically, leaving you free to build any of the custom configurations explored in the last few sections of this document. For example, start a [CentOS][] container without configuring the network:
+1. Use the `--net=none` option when start a container to tell Docker not to configure its network automatically, leaving you free to build your custom network. For example, start a [CentOS][] container without configuring the network:
 ```bash
 $ sudo docker run -ti --rm --name=test_container --net=none centos:latest /bin/bash
 ```
@@ -27,15 +27,15 @@ $ sudo docker run -ti --rm --name=test_container --net=none centos:latest /bin/b
 
 Add an extra interface
 ----------------------
-Use `dockernet <container> addif <interface> [<bridge>=docker0]` to add a extra interface to a container.
+Use `dockernet <container> addif <interface> [<bridge>=docker0]` to add an extra interface to a container.
 
-Following command will add interface `eth1` to container `test_container` and bridge this interface with default interface `docker0`:
+Following command will add interface `eth1` to container `test_container` and bridge this interface with `docker0`:
 
 ```bash
 sudo dockernet test_container addif eth1
 ```
 
-If you want to bridge your newly created interface to another interface `br0` other than `docker0`, issue:
+If you want to bridge your newly created interface to another interface `br0`, just issue:
 
 ```bash
 sudo dockernet test_container addif eth1 br0
@@ -49,13 +49,14 @@ sudo dockernet test_container up eth1
 
 Set a static IP address
 -----------------------
-Usually, you should clear all IP addresse associated with that interface in advance:
+Usually, you may want to clear all IP addresses associated with that interface:
 
 ```bash
 dockernet <container> clearip <interface>
 ```
 
 Then, add an IP address. You should specify an IP address in [CIDR notation][]. `<default gateway>` is optional.
+If not specified, no default route will be configured.
 
 ```bash
 dockernet <container> addip <interface> <CIDR> [<default gateway>]
@@ -72,7 +73,7 @@ sudo dockernet test_container addip eth1 2001:db8:1234:5678::100/64 2001:db8:123
 
 Add a static route
 ------------------
-You can use following notation to add or delete a route. The `<ROUTE>` part given in these commands are directly passed to the `ip route` command.
+You can use following notation to add or delete a route. The `<ROUTE>` part given in these commands are directly passed to the `ip route` command:
 
 ```bash
 dockernet <CONTAINER> addroute <CONTAINER_IFNAME> <ROUTE>
@@ -85,7 +86,8 @@ For instence, let's add 2 static routes to container `test_container`:
 sudo dockernet test_container addroute eth1 203.0.113.0/24 via 192.0.2.254 metric 1000
 sudo dockernet test_container addroute eth1 2001:db8:abcd::/48 via 2001:db8:1234:5678::ffff metric 1000
 ```
-These two rule will tell your container that route packets targeting network `203.0.113.0/24` to router `192.0.2.254` and `2001:db8:abcd::/48` to router `2001:db8:1234:5678::ffff` through interface `eth1`.
+
+These two rules will tell your container that route packets targeting network `203.0.113.0/24` to router `192.0.2.254` and `2001:db8:abcd::/48` to router `2001:db8:1234:5678::ffff` through interface `eth1`.
 
 
 [Docker]: https://www.docker.com/
