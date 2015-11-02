@@ -82,8 +82,8 @@ dockernet <CONTAINER> delroute <CONTAINER_IFNAME> <ROUTE>
 For instence, let's add 2 static routes to container `test_container`:
 
 ```bash
-dockernet test_container addroute eth1 203.0.113.0/24 via 192.0.2.254 metric 1000
-dockernet test_container addroute eth1 2001:db8:abcd::/48 via 2001:db8:1234:5678::ffff metric 1000
+sudo dockernet test_container addroute eth1 203.0.113.0/24 via 192.0.2.254 metric 1000
+sudo dockernet test_container addroute eth1 2001:db8:abcd::/48 via 2001:db8:1234:5678::ffff metric 1000
 ```
 These two rule will tell your container that route packets targeting network `203.0.113.0/24` to router `192.0.2.254` and `2001:db8:abcd::/48` to router `2001:db8:1234:5678::ffff` through interface `eth1`.
 
